@@ -4,8 +4,9 @@
 	"description": "REST api client exercise",
 	"main": "index.js",
 	"scripts": {
-		"start": "npm-run-all -p -l start:dev start:mock-server",
+		"start": "npm-run-all -p -l start:dev start:mock-server start:auth-server",
 		"start:mock-server": "cd server && npm start",
+		"start:auth-server": "cd auth_server && npm start",
 		"start:dev": "parcel index.html",
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
