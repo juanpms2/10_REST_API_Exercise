@@ -4,17 +4,18 @@ import Axios from "axios";
 const baseUrl = "http://localhost:3050/api/cars";
 
 // XMLHttpRequest
-export const getAllCars = () => {
+export const getAllCars = (token) => {
 	return new Promise((resolve) => {
 		const data = new XMLHttpRequest();
 		data.overrideMimeType("application/json");
 		data.onload = () => resolve(JSON.parse(data.response));
 		data.open("get", baseUrl);
+		data.setRequestHeader("Authorization", `Bearer ${token}`);
 		data.send();
 	});
 };
 
-export const getCarById = (id) => {
+export const getCarById = (id, token) => {
 	return new Promise((resolve) => {
 		const data = new XMLHttpRequest();
 		data.overrideMimeType("application/json");
@@ -25,15 +26,17 @@ export const getCarById = (id) => {
 			resolve(car);
 		};
 		data.open("get", baseUrl);
+		data.setRequestHeader("Authorization", `Bearer ${token}`);
 		data.send();
 	});
 };
 
-export const addCar = (car) => {
+export const addCar = (car, token) => {
 	const json = JSON.stringify({ ...car });
 	return new Promise((resolve) => {
 		const data = new XMLHttpRequest();
 		data.open("POST", baseUrl);
+		data.setRequestHeader("Authorization", `Bearer ${token}`);
 		data.setRequestHeader("Content-type", "application/json; charset=utf-8");
 		data.send(json);
 		resolve("ok");
@@ -41,8 +44,13 @@ export const addCar = (car) => {
 };
 
 //Fetch
-export const getCarsAllFetch = () => {
-	return fetch(baseUrl)
+
+export const getCarsAllFetch = (headers) => {
+	return fetch(baseUrl, {
+		headers: {
+			Authorization: `Bearer ${headers}`,
+		},
+	})
 		.then((response) => {
 			if (response.ok) {
 				return response.json();
@@ -53,8 +61,12 @@ export const getCarsAllFetch = () => {
 		.catch((error) => console.log("Not found", error));
 };
 
-export const getCarByIdFetch = (carId) => {
-	return fetch(baseUrl)
+export const getCarByIdFetch = (carId, token) => {
+	return fetch(baseUrl, {
+		headers: {
+			Authorization: `Bearer ${token}`,
+		},
+	})
 		.then((response) => {
 			if (response.ok) {
 				return response.json();
@@ -69,11 +81,14 @@ export const getCarByIdFetch = (carId) => {
 		.catch((error) => console.log("Not found", error));
 };
 
-export const addCarFetch = (car) => {
+export const addCarFetch = (car, token) => {
 	return fetch(baseUrl, {
 		method: "POST",
 		body: JSON.stringify(car),
-		headers: { "content-type": "application/json" },
+		headers: {
+			Authorization: `Bearer ${token}`,
+			"content-type": "application/json",
+		},
 	})
 		.then((response) => {
 			if (response.ok) {
@@ -89,9 +104,14 @@ export const addCarFetch = (car) => {
 };
 
 // Async await
-export const getCarsAllAsync = async () => {
+export const getCarsAllAsync = async (token) => {
+	const headers = {
+		headers: {
+			Authorization: `Bearer ${token}`,
+		},
+	};
 	try {
-		const response = await fetch(baseUrl);
+		const response = await fetch(baseUrl, headers);
 		const data = await response.json();
 		return data;
 	} catch (error) {
@@ -99,9 +119,14 @@ export const getCarsAllAsync = async () => {
 	}
 };
 
-export const getCarByIdAsync = async (carId) => {
+export const getCarByIdAsync = async (carId, token) => {
+	const headers = {
+		headers: {
+			Authorization: `Bearer ${token}`,
+		},
+	};
 	try {
-		const response = await fetch(baseUrl);
+		const response = await fetch(baseUrl, headers);
 		const data = await response.json();
 		const car = data.map((i) => i).find((c) => c.car_id === carId);
 		return car;
@@ -110,11 +135,14 @@ export const getCarByIdAsync = async (carId) => {
 	}
 };
 
-export const addCarAsync = async (car) => {
+export const addCarAsync = async (car, token) => {
 	const method = {
 		method: "POST",
 		body: JSON.stringify(car),
-		headers: { "content-type": "application/json" },
+		headers: {
+			Authorization: `Bearer ${token}`,
+			"content-type": "application/json",
+		},
 	};
 	try {
 		const response = await fetch(baseUrl, method);
@@ -126,6 +154,20 @@ export const addCarAsync = async (car) => {
 };
 
 // Axios
+
+// Interceptor axios
+export const setUpRequest = (token) => {
+	Axios.interceptors.request.use(
+		(config) => {
+			config.headers["Authorization"] = `Bearer ${token}`;
+			return config;
+		},
+		(err) => {
+			return Promise.reject(err);
+		}
+	);
+};
+
 export const getAllCarsAxios = () => {
 	return Axios.get(baseUrl).then((cars) => cars);
 };

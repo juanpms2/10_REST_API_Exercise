@@ -1,8 +1,8 @@
-const express = require("express");
-(path = require("path")),
-	(cookieParser = require("cookie-parser")),
-	(bodyParser = require("body-parser")),
-	(cors = require("cors"));
+const express = require("express"),
+	path = require("path"),
+	cookieParser = require("cookie-parser"),
+	bodyParser = require("body-parser"),
+	cors = require("cors");
 
 const users = require("./routes/users");
 const cars = require("./routes/cars");

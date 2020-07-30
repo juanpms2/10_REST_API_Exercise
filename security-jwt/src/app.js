@@ -18,10 +18,29 @@ import {
 	getAllCarsAxios,
 	addCarAxios,
 	deleteCarByIdAxios,
+	setUpRequest,
 	getCarsAllAsync,
 	getCarByIdAsync,
 	addCarAsync,
 } from "./API/carsApi";
+
+function getParameterByName() {
+	var result = [];
+	var parts = [];
+
+	location.search
+		.substr(1)
+		.split("&")
+		.forEach(function (item) {
+			parts = item.split("=");
+			if (parts[0] != "") {
+				result.push(parts);
+			}
+		});
+
+	return result[0][1];
+}
+const token = getParameterByName();
 
 document.addEventListener("DOMContentLoaded", () => {
 	// XMLHttpRequest
@@ -29,7 +48,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	buttonLoadCars.addEventListener("click", (event) => {
 		event.stopPropagation();
 		cleanTable("cars-table");
-		getAllCars()
+		getAllCars(token)
 			.then((result) => {
 				addCarRows(result, "cars-table");
 			})
@@ -40,7 +59,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	buttonLoadCar.addEventListener("click", (event) => {
 		event.stopPropagation();
 		const carId = retrieveCarId();
-		getCarById(carId).then((r) => populateEditCarForm(r));
+		getCarById(carId, token).then((r) => populateEditCarForm(r));
 	});
 
 	const buttonAddCar = document.getElementById("addPromise");
@@ -48,10 +67,10 @@ document.addEventListener("DOMContentLoaded", () => {
 		event.stopPropagation();
 		event.preventDefault();
 		const car = retrieveCarForm();
-		addCar(car)
-			.then((_) => {
+		addCar(car, token)
+			.then(() => {
 				cleanTable("cars-table");
-				return getAllCars();
+				return getAllCars(token);
 			})
 			.then((result) => {
 				addCarRows(result, "cars-table");
@@ -60,11 +79,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
 	// Fetch
 	const buttonLoadCarsFetch = document.getElementById("loadcarsFetch");
-	buttonLoadCarsFetch.addEventListener("click", async (event) => {
+	buttonLoadCarsFetch.addEventListener("click", (event) => {
 		event.stopPropagation();
 		cleanTable("cars-table");
 
-		getCarsAllFetch().then((data) => {
+		getCarsAllFetch(token).then((data) => {
 			const cars = data.map((i) => i);
 			addCarRows(cars, "cars-table");
 		});
@@ -74,7 +93,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	buttonLoadCarFetch.addEventListener("click", (event) => {
 		event.stopPropagation();
 		const carId = retrieveCarId();
-		getCarByIdFetch(carId).then((data) => {
+		getCarByIdFetch(carId, token).then((data) => {
 			populateEditCarForm(data);
 		});
 	});
@@ -84,10 +103,10 @@ document.addEventListener("DOMContentLoaded", () => {
 		event.stopPropagation();
 		event.preventDefault();
 		const car = retrieveCarForm();
-		addCarFetch(car)
+		addCarFetch(car, token)
 			.then(() => {
 				cleanTable("cars-table");
-				return getCarsAllFetch();
+				return getCarsAllFetch(token);
 			})
 			.then((result) => {
 				addCarRows(result, "cars-table");
@@ -101,7 +120,7 @@ document.addEventListener("DOMContentLoaded", () => {
 		event.stopPropagation();
 		cleanTable("cars-table");
 
-		const data = await getCarsAllAsync();
+		const data = await getCarsAllAsync(token);
 		const cars = data.map((i) => i);
 		addCarRows(cars, "cars-table");
 	});
@@ -109,7 +128,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	buttonLoadCarAsync.addEventListener("click", async (event) => {
 		event.stopPropagation();
 		const carId = retrieveCarId();
-		const data = await getCarByIdAsync(carId);
+		const data = await getCarByIdAsync(carId, token);
 		populateEditCarForm(data);
 	});
 
@@ -119,9 +138,9 @@ document.addEventListener("DOMContentLoaded", () => {
 		event.preventDefault();
 		const car = retrieveCarForm();
 		try {
-			await addCarAsync(car);
+			await addCarAsync(car, token);
 			cleanTable("cars-table");
-			const newCars = await getCarsAllAsync();
+			const newCars = await getCarsAllAsync(token);
 			addCarRows(newCars, "cars-table");
 			console.log("add new car ok");
 		} catch (error) {
@@ -134,6 +153,8 @@ document.addEventListener("DOMContentLoaded", () => {
 	buttonLoadCarsAxios.addEventListener("click", async (event) => {
 		event.stopPropagation();
 		cleanTable("cars-table");
+
+		setUpRequest(token);
 		const cars = await getAllCarsAxios();
 		addCarRows(cars.data, "cars-table");
 	});
@@ -143,6 +164,7 @@ document.addEventListener("DOMContentLoaded", () => {
 		event.stopPropagation();
 		const carId = retrieveCarId();
 
+		setUpRequest(token);
 		const car = await getCarByIdAxios(carId);
 		populateEditCarForm(car);
 	});
@@ -153,6 +175,7 @@ document.addEventListener("DOMContentLoaded", () => {
 		event.preventDefault();
 		const car = retrieveCarForm();
 
+		setUpRequest(token);
 		await addCarAxios(car);
 		cleanTable("cars-table");
 		const newCars = await getAllCarsAxios();
@@ -163,6 +186,7 @@ document.addEventListener("DOMContentLoaded", () => {
 		event.stopPropagation();
 		const carId = retrieveCarId();
 
+		setUpRequest(token);
 		await deleteCarByIdAxios(carId);
 		const newCars = await getAllCarsAxios();
 		cleanTable("cars-table");
