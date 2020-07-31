@@ -7,6 +7,9 @@ const express = require("express"),
 
 const users = require("./routes/users");
 const cars = require("./routes/cars");
+const { ApolloServer } = require("apollo-server-express");
+const resolvers = require("./graphql/resolvers");
+const typeDefs = require("./graphql/type-defs");
 
 const app = express();
 
@@ -25,11 +28,22 @@ const jwtCheck = expressjwt({
 });
 
 app.use("/api/users", jwtCheck, users);
-app.use("/api/cars", jwtCheck, cars);
+app.use("/api/cars", jwtCheck, cars.router);
+
+const graphqlServer = new ApolloServer({
+	typeDefs,
+	resolvers,
+});
+graphqlServer.applyMiddleware({ app });
 
 app.set("port", process.env.PORT || 3050);
 app.listen(app.get("port"));
 
 console.log("Listening on port: " + app.get("port"));
+console.log(
+	"GraphQL server listening on: http://localhost:" +
+		app.get("port") +
+		"/graphql"
+);
 
 module.exports = app;

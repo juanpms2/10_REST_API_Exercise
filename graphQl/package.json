@@ -1,0 +1,31 @@
+{
+	"name": "jwt-vanilla-javascript-security",
+	"version": "0.0.0",
+	"description": "JWT Vanilla JavaScript Security",
+	"main": "index.js",
+	"scripts": {
+		"start": "npm-run-all -p -l start:auth-server start:mock-server start:dev",
+		"start:mock-server": "cd server && npm start",
+		"start:auth-server": "cd auth_server && npm start",
+		"start:dev": "parcel index.html",
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"keywords": [
+		"REST",
+		"api",
+		"fetch",
+		"promises",
+		"axios"
+	],
+	"author": "Juan Pablo Martínez",
+	"license": "MIT",
+	"dependencies": {
+		"graphql-request": "^2.0.0",
+		"npm-run-all": "^4.1.5",
+		"regenerator-runtime": "^0.13.7"
+	},
+	"devDependencies": {
+		"axios": "^0.18.1",
+		"parcel": "^1.11.0"
+	}
+}
