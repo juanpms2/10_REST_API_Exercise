@@ -4,11 +4,11 @@ El ejercico consiste en securizar las peticiones al server de datos mediante un 
 
 Para ello se ha utilizado la librería `JWT` en el `auth_server` y `express-jwt` para el `server` de datos.
 
-También se utiliza la librería `cors` configurada para que sólo acepte peticiones del servidor cliente.
+También se utiliza la librería `cors` configurada a moso de ejemplo para que el `auth-server` y el `server` de datos sólo acepte peticiones del cliente.
 
 Las peticiones se implementan de distinta forma utilizando `XMLHttpRequest`, `Fetch`, `Async await` y la librería `Axios`.
 
-Esto es sólo una demostración de cómo utilizar `JWT` y el acceso mediante `tokens` implementar una seguridad "completa" requeriría muchas más medidas y toma de decisiones que no aplican en este ejemplo.
+Esto es sólo una demostración de cómo utilizar `JWT` y el acceso mediante `tokens`. Implementar una seguridad "completa" requeriría muchas más medidas y toma de decisiones que no aplican en este ejemplo.
 
 ## Puesta en marcha
 

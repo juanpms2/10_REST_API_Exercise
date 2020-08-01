@@ -125,10 +125,6 @@ router
 		}
 	});
 
-// module.exports = router;
-// module.exports = getCarData;
-// module.exports = getCar;
-// module.exports = saveCarData;
 module.exports = {
 	router,
 	getCarData,

@@ -1,5 +1,4 @@
 const express = require("express"),
-	path = require("path"),
 	cookieParser = require("cookie-parser"),
 	bodyParser = require("body-parser"),
 	cors = require("cors"),
@@ -34,6 +33,7 @@ const graphqlServer = new ApolloServer({
 	typeDefs,
 	resolvers,
 });
+
 graphqlServer.applyMiddleware({ app });
 
 app.set("port", process.env.PORT || 3050);
