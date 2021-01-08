@@ -23,7 +23,7 @@
 		"regenerator-runtime": "^0.13.7"
 	},
 	"devDependencies": {
-		"axios": "^0.18.1",
+		"axios": "^0.21.1",
 		"parcel": "^1.11.0"
 	}
 }
