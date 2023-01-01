@@ -26,6 +26,6 @@
 	},
 	"devDependencies": {
 		"axios": "^0.21.1",
-		"parcel": "^1.11.0"
+		"parcel": "^2.8.2"
 	}
 }
